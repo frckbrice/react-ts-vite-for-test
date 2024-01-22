@@ -24,45 +24,48 @@ const initProductState: ProductType[] = [
   },
 ];
 
-
 //* we will use data from json server
 // const initProductState: ProductType [] = [];
 
 export type UseProductContextType = {
-   products: ProductType[]
- };
-
-const initContextState: UseProductContextType = { 
-  products: []
+  products: ProductType[];
 };
 
-export const ProductContext = createContext<UseProductContextType>(initContextState);
+const initContextState: UseProductContextType = {
+  products: [],
+};
 
-type ChildrenType  = {
+export const ProductContext =
+  createContext<UseProductContextType>(initContextState);
+
+type ChildrenType = {
   children?: ReactElement | ReactElement[];
-}
+};
 
-export const ProductProvider = ({children}: ChildrenType): ReactElement => {
+export const ProductProvider = ({ children }: ChildrenType): ReactElement => {
   const [products, setProducts] = useState<ProductType[]>(initProductState);
 
-  // useEffect(() => {
-  //   // const fetchedProducts = async(): Promise<ProductType[]> => {
-  //   //   const data = await fetch('http://localhost:3500/products').then((response) => response.json()).catch(err  => {
-  //   //     if(err instanceof Error) 
-  //   //       console.log(err.message)
-  //   // });
-  //   // return data;
-  //   // }
+  useEffect(() => {
+    // const fetchedProducts = async(): Promise<ProductType[]> => {
+    //   const data = await fetch('http://localhost:3500/products').then((response) => response.json()).catch(err  => {
+    //     if(err instanceof Error)
+    //       console.log(err.message)
+    // });
+    // return data;
+    // }
 
+    fetchedProducts().then((products) => {
+      console.log(products);
+      setProducts(products);
+    });
+  }, []);
 
-  //   fetchedProducts().then(products =>{
-  //     console.log(products);
-  //      setProducts(products);
-  //   })
-  // },[])
-
-  return <ProductContext.Provider value={{products}}> {children} </ProductContext.Provider>;
-}
-
+  return (
+    <ProductContext.Provider value={{ products }}>
+      {" "}
+      {children}{" "}
+    </ProductContext.Provider>
+  );
+};
 
 export default ProductProvider;
